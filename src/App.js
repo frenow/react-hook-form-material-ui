@@ -1,13 +1,21 @@
 import React from "react";
-import { Button, TextField, Typography, Container } from "@material-ui/core";
+import { 
+  Button, 
+  Typography, 
+  FormControlLabel,
+  Checkbox,
+  Switch,  
+  Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from 'react-hook-form';
-import InputMask from "react-input-mask";
+
+import { InputText } from "./components/Form/InputText";
+import { InputTextMask } from "./components/Form/InputTextMask";
 
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 
-const userFormSchema = yup.object().shape({
+const cadastroFormSchema = yup.object().shape({
   nome: yup.string().required('Nome obrigatório.').min(3, 'No mínimo 3 caracteres.'),
   cnpj: yup.string().required('CNPJ obrigatório.'),
   endereco: yup.string().required('Endereço obrigatório.'),
@@ -36,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 export default function App(){
 
   const { register, handleSubmit, errors = null } = useForm({
-    resolver: yupResolver(userFormSchema)   
+    resolver: yupResolver(cadastroFormSchema)   
 })
 
   const classes = useStyles();
@@ -53,98 +61,100 @@ export default function App(){
           Cadastro
         </Typography>
          <form className={classes.form} onSubmit={handleSubmit(handleSignIn)}>
-         <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
+
+         <InputText
             id="nome"
             label="Nome/Razão"
             name="nome"
-            autoFocus
-            inputRef={register}
-            helperText={errors.nome && errors.nome.message}
-            error={!!errors.nome}
-          />           
-                   
-          <InputMask
-              mask="99.999.999/9999-99"
-              maskChar=" "
-          >
-          {() => <TextField
-            variant="outlined"
-            margin="normal"
-             id="cnpj"
-            label="CNPJ"
-            name="cnpj"
-            inputRef={register}
-            helperText={errors.cnpj && errors.cnpj.message}
-            error={!!errors.cnpj}
-          /> }
-          </InputMask>   
+            autoFocus={true}
+            register={register}
+            error={errors.nome}
+            errorMsg={errors.nome && errors.nome.message}
+         />
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
+         <InputTextMask
+           id="cnpj"
+           label="CNPJ"
+           name="cnpj"
+           autoFocus={false}
+           register={register}
+           error={errors.cnpj}
+           errorMsg={errors.cnpj && errors.cnpj.message}
+           mask="99.999.999/9999-99"
+         />
+
+          <InputText
             id="endereco"
             label="Endereço"
             name="endereco"
-            inputRef={register}
-            helperText={errors.endereco && errors.endereco.message}
-            error={!!errors.endereco}
-          />  
+            autoFocus={false}
+            register={register}
+            error={errors.endereco}
+            errorMsg={errors.endereco && errors.endereco.message}
+         />
 
-          <TextField
-            variant="outlined"
-            margin="normal"
+          <InputText
             id="numero"
             label="Número"
             name="numero"
-            inputRef={register}
-            helperText={errors.numero && errors.numero.message}
-            error={!!errors.numero}
-          /> 
+            autoFocus={false}
+            register={register}
+            error={errors.numero}
+            errorMsg={errors.numero && errors.numero.message}
+         />
 
-          <InputMask
-              mask="99999-999"
-              maskChar=" "
-            >
-          {() => <TextField
-            variant="outlined"
-            margin="normal"
-             id="cep"
-            label="CEP"
-            name="cep"
-            inputRef={register}
-            helperText={errors.cep && errors.cep.message}
-            error={!!errors.cep}
-          /> }
-          </InputMask>                        
+        <InputTextMask
+           id="cep"
+           label="CEP"
+           name="cep"
+           autoFocus={false}
+           register={register}
+           error={errors.cep}
+           errorMsg={errors.cep && errors.cep.message}
+           mask="99999-999"
+         />                      
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
+          <InputText
             id="email"
-            label="Email"
+            label="E-mail"
             name="email"
-            autoComplete="email"
-            inputRef={register}
-            helperText={errors.email && errors.email.message}
-            error={!!errors.email}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            name="password"
-            label="Password"
-            type="password"
+            autoFocus={false}
+            register={register}
+            error={errors.email}
+            errorMsg={errors.email && errors.email.message}
+         />
+
+          <InputText
             id="password"
-            autoComplete="current-password"
-            inputRef={register}
-            helperText={errors.password && errors.password.message}
-            error={!!errors.password}
-          />
+            label="Senha"
+            name="password"
+            autoFocus={false}
+            register={register}
+            error={errors.password}
+            errorMsg={errors.password && errors.password.message}
+         />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="check"
+                    color="primary"
+                    inputRef={register}
+                  />
+                }
+                label="Check"
+              />    
+
+              <FormControlLabel
+                control={
+                  <Switch
+                    name="switch"
+                    color="primary"
+                    inputRef={register}
+                  />
+                }
+                label="Switch"
+              />                   
           
           <Button
             type="submit"
